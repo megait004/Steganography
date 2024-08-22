@@ -3,25 +3,41 @@ import axios from "axios";
 import { FileUpload } from "@components/ui/file-upload";
 import { ImageUpload } from "@components/ui/image-upload";
 import { Button } from "@components/ui/moving-border-button";
+
 const Create: React.FC = () => {
-    const [files, setFiles] = useState<File[]>([]);
-    const [images, setImages] = useState<File[]>([]);
+    const [file, setFile] = useState<File | null>(null);
+    const [image, setImage] = useState<File | null>(null);
+    const [downloadUrl, setDownloadUrl] = useState<string | null>(null); // State to hold the download URL
+
     const handleFileChange = (newFiles: File[]) => {
-        setFiles(newFiles);
+        setFile(newFiles[0] || null);
     };
+
     const handleImageChange = (newImages: File[]) => {
-        setImages(newImages);
+        setImage(newImages[0] || null);
     };
+
     const handleSubmit = async () => {
         const formData = new FormData();
-        files.forEach((file) => formData.append("files", file));
-        images.forEach((image) => formData.append("images", image));
+
+        if (file) {
+            formData.append("file", file);
+        }
+
+        if (image) {
+            formData.append("image", image);
+        }
+
         try {
-            const response = await axios.post("/api/upload", formData, {
+            const response = await axios.post("http://127.0.0.1:8080/api/upload", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
+                responseType: "blob"
             });
+
+            const downloadUrl = URL.createObjectURL(response.data);
+            setDownloadUrl(downloadUrl);
 
             console.log("Upload success:", response.data);
         } catch (error) {
@@ -44,6 +60,15 @@ const Create: React.FC = () => {
             >
                 Upload
             </Button>
+            {downloadUrl && (
+                <a
+                    href={downloadUrl}
+                    download="combined_image.jpg"
+                    className="mt-4 inline-flex items-center justify-center px-4 py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-700"
+                >
+                    Download Combined Image
+                </a>
+            )}
         </div>
     );
 };

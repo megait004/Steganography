@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
 const MyImage: React.FC = () => {
     return (
-        <div className="">
-        </div>
+        <>
+        </>
     );
 };
 

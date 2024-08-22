@@ -3,8 +3,11 @@ import React from "react";
 import { Button } from "@components/ui/moving-border-button";
 
 import Icosa from "@public/Icosa.svg";
+import { useNavigate } from "react-router-dom";
 
 const Index: React.FC = () => {
+const navigate = useNavigate()
+
     return (
         <div className="flex h-screen flex-col items-center justify-center gap-4 text-5xl font-bold">
             <div className="flex items-center justify-center gap-4">
@@ -28,11 +31,11 @@ const Index: React.FC = () => {
             </p>
             <Button
                 borderRadius="1.5rem"
-                as="a"
+                as="button"
                 containerClassName="relative inline-flex items-center justify-center overflow-hidden text-xl h-16 w-48 p-2 bg-transparent"
                 duration={1500}
                 className="relative flex h-full w-full transform items-center justify-center rounded-lg text-lg font-bold text-white shadow-lg transition-transform hover:scale-105"
-                href="/create"
+                onClick={() => navigate("/create")}
             >
                 Getting Started
             </Button>
